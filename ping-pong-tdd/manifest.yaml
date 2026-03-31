@@ -1,0 +1,19 @@
+name: ping-pong-tdd
+kind: shared-resources
+version: 2.0.0
+description: >
+  DEPRECATED as an invocable skill. This directory now serves as a shared
+  reference library for /tdd-plan, /tdd-task, and /tdd-commit.
+deprecated: true
+replaced_by:
+  - tdd-plan
+  - tdd-task
+  - tdd-commit
+metadata:
+  tags:
+    - tdd
+    - ping-pong
+    - pair-programming
+    - testing
+    - xp
+    - red-green-refactor
