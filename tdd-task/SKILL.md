@@ -1,11 +1,11 @@
 ---
 name: tdd-task
 description: >
-  Runs a single task's RED-GREEN-REFACTOR TDD loop in a ping-pong style.
-  Reads the active session file from .tdd-sessions/ to find the current task,
-  drives the full cycle with the developer (alternating test writing and
-  implementation), then updates the session file on completion.
-  Run /tdd-plan first to create the session file.
+  단일 태스크의 RED-GREEN-REFACTOR TDD 루프를 ping-pong 방식으로 실행합니다.
+  .tdd-sessions/에서 활성 세션 파일을 읽어 현재 태스크를 찾고,
+  개발자와 함께 전체 사이클을 진행하며 (테스트 작성과 구현을 번갈아가며),
+  완료 시 세션 파일을 업데이트합니다.
+  세션 파일을 생성하려면 먼저 /tdd-plan을 실행하세요.
 version: 1.0.0
 category: engineering
 tags: [tdd, pair-programming, ping-pong, red-green-refactor, testing]
@@ -23,46 +23,46 @@ triggers:
 /tdd-task [story-id]
 ```
 
-- **No argument** — auto-detect the active session file from `.tdd-sessions/`
-- **Story ID provided** — use `.tdd-sessions/{story-id}.md` directly
+- **인수 없음** — `.tdd-sessions/`에서 활성 세션 파일을 자동 감지
+- **스토리 ID 제공** — `.tdd-sessions/{story-id}.md`를 직접 사용
 
 ---
 
-## On Start: Locate Session File
+## 시작 시: 세션 파일 찾기
 
-### Without an argument
+### 인수 없이
 
-1. List files in `.tdd-sessions/`
-2. **If the directory does not exist or is empty:**
+1. `.tdd-sessions/`의 파일 목록 나열
+2. **디렉토리가 존재하지 않거나 비어 있는 경우:**
    ```
    "No active TDD session found. Run /tdd-plan first to create a session."
    ```
-   STOP.
-3. **If exactly one file exists:** use it
-4. **If multiple files exist:**
+   중지.
+3. **파일이 정확히 하나만 있는 경우:** 해당 파일 사용
+4. **여러 파일이 있는 경우:**
    ```
    "Multiple sessions found. Which story are you working on?
    [1] 12345678.md — User Profile Update
    [2] user-profile-update-2026-03-31.md — (no ID)
    Type the number or story ID."
    ```
-   PAUSE and wait for selection.
+   일시 정지하고 선택을 기다립니다.
 
-### After locating the file
+### 파일을 찾은 후
 
-Read the session file. **If all tasks are already ✅ done:**
+세션 파일을 읽습니다. **모든 태스크가 이미 ✅ 완료된 경우:**
 ```
 "All tasks in this session are complete. Run /tdd-commit to review and commit."
 ```
-STOP.
+중지.
 
-Find the first task with status `⏳ pending` and mark it `🔄 active` in the file.
+상태가 `⏳ pending`인 첫 번째 태스크를 찾아 파일에서 `🔄 active`로 표시합니다.
 
 ---
 
-## Session State Block
+## 세션 상태 블록
 
-Render this before every AI action. Read all values from `.tdd-session.md`.
+모든 AI 작업 전에 렌더링합니다. `.tdd-session.md`에서 모든 값을 읽습니다.
 
 ```markdown
 ---
@@ -89,9 +89,9 @@ Render this before every AI action. Read all values from `.tdd-session.md`.
 
 ---
 
-## Turn Setup
+## 턴 설정
 
-Display the current task details, then ask:
+현재 태스크 세부 사항을 표시한 후 질문합니다:
 
 ```
 Task [N]: [title]
@@ -103,52 +103,52 @@ Who writes the first failing test?
 → **"you"** — AI writes it
 ```
 
-PAUSE and wait.
+일시 정지하고 기다립니다.
 
 ---
 
-## Escape Hatches (always available)
+## 탈출 옵션 (항상 사용 가능)
 
-| Developer types | Effect |
+| 개발자 입력 | 효과 |
 |----------------|--------|
-| `skip` | AI takes the current turn instead |
-| `next task` | Mark current task done, move to next |
-| `abort` | Stop session, run /tdd-commit to commit what's done |
-| `restart task` | Reset current task, start from RED |
+| `skip` | AI가 현재 턴을 대신 진행 |
+| `next task` | 현재 태스크를 완료로 표시하고 다음으로 이동 |
+| `abort` | 세션 중지, 완료된 내용을 커밋하려면 /tdd-commit 실행 |
+| `restart task` | 현재 태스크 초기화, RED부터 다시 시작 |
 
 ---
 
-## RED Phase
+## RED 단계
 
-### If AI's turn
+### AI의 턴인 경우
 
-1. Render session state block (Phase: RED, Turn: AI)
-2. **Before writing, recall the detected conventions from the session file:**
-   - Test file location (co-located vs `test/` directory)
-   - File naming suffix
-   - describe/test/it structure and nesting depth
-   - Assertion library and style
-   - Mock pattern (vi.mock, vi.fn injection, mockk, MagicMock, etc.)
-   - Test method naming convention
-3. Write a failing test that:
-   - Follows the project's detected conventions (not generic defaults)
-   - Has a clear, behavior-describing name
-   - References a function/class/endpoint that does not exist yet or behaves incorrectly
-   - Will fail for the **right reason**: assertion failure or missing symbol — NOT syntax/import error
-4. Display the test in a code block with the **exact file path** matching the project convention
-5. Describe the expected failure output
-6. Display:
+1. 세션 상태 블록 렌더링 (Phase: RED, Turn: AI)
+2. **작성 전, 세션 파일에서 감지된 컨벤션을 확인합니다:**
+   - 테스트 파일 위치 (동일 위치 vs `test/` 디렉토리)
+   - 파일 명명 접미사
+   - describe/test/it 구조 및 중첩 깊이
+   - 어서션 라이브러리 및 스타일
+   - 목 패턴 (vi.mock, vi.fn injection, mockk, MagicMock, 등)
+   - 테스트 메서드 명명 컨벤션
+3. 다음 조건을 충족하는 실패하는 테스트를 작성합니다:
+   - 프로젝트에서 감지된 컨벤션을 따릅니다 (일반적인 기본값이 아님)
+   - 명확하고 동작을 설명하는 이름을 가집니다
+   - 아직 존재하지 않거나 올바르지 않게 동작하는 함수/클래스/엔드포인트를 참조합니다
+   - **올바른 이유**로 실패합니다: 어서션 실패 또는 심볼 누락 — 문법/import 오류가 아님
+4. 프로젝트 컨벤션에 맞는 **정확한 파일 경로**와 함께 코드 블록에 테스트를 표시합니다
+5. 예상 실패 출력을 설명합니다
+6. 표시:
    ```
    Run this test and confirm it is RED (failing for the right reason).
    Type **"red confirmed"** or **"failing"** to continue.
    (Or type "skip" to have AI write the implementation instead)
    ```
-7. PAUSE and wait
+7. 일시 정지하고 기다립니다
 
-### If developer's turn
+### 개발자의 턴인 경우
 
-1. Render session state block (Phase: RED, Turn: DEV)
-2. Display:
+1. 세션 상태 블록 렌더링 (Phase: RED, Turn: DEV)
+2. 표시:
    ```
    ## 🔴 RED — Your Turn
 
@@ -158,10 +158,10 @@ PAUSE and wait.
    Paste your test code here.
    (Or type "skip" to have AI write it instead)
    ```
-3. PAUSE and wait
-4. When developer pastes code: acknowledge, note file path, proceed to GREEN
+3. 일시 정지하고 기다립니다
+4. 개발자가 코드를 붙여넣으면: 확인하고, 파일 경로를 기록하고, GREEN으로 진행합니다
 
-### What "right reason" means
+### "올바른 이유"의 의미
 
 ```
 ✅ Correct RED                              ❌ Wrong RED (fix first)
@@ -171,36 +171,36 @@ AssertionError: expected null to equal {...} ImportError: cannot import name
 MockKException: no answer found             ClassNotFoundException
 ```
 
-If the failure is wrong: create an empty stub (no behavior) to resolve the compile/import error, re-run, then confirm RED.
+실패 이유가 잘못된 경우: 컴파일/import 오류를 해결하기 위해 빈 스텁(동작 없음)을 생성하고, 다시 실행한 후 RED를 확인합니다.
 
 ---
 
-## GREEN Phase
+## GREEN 단계
 
-### If AI's turn
+### AI의 턴인 경우
 
-1. Render session state block (Phase: GREEN, Turn: AI)
-2. **Before writing, recall the detected conventions from the session file:**
-   - Directory structure (feature-based vs layer-based)
-   - Class/function naming convention
-   - Dependency injection pattern
-   - Annotation/decorator style
-   - Error handling approach
-3. Write the **minimum code** to make the failing test pass — nothing more
-4. Display code with exact file path
-5. Display:
+1. 세션 상태 블록 렌더링 (Phase: GREEN, Turn: AI)
+2. **작성 전, 세션 파일에서 감지된 컨벤션을 확인합니다:**
+   - 디렉토리 구조 (기능 기반 vs 레이어 기반)
+   - 클래스/함수 명명 컨벤션
+   - 의존성 주입 패턴
+   - 어노테이션/데코레이터 스타일
+   - 오류 처리 방식
+3. 실패한 테스트를 통과시키기 위한 **최소한의 코드**를 작성합니다 — 그 이상은 작성하지 않습니다
+4. 정확한 파일 경로와 함께 코드를 표시합니다
+5. 표시:
    ```
    Add or modify this code, then run all tests.
    Type **"green confirmed"** or **"passing"** when all tests pass.
    (Paste error output if tests still fail)
    ```
-6. PAUSE and wait
-7. If developer pastes errors: diagnose the root cause, provide a targeted fix, PAUSE again
+6. 일시 정지하고 기다립니다
+7. 개발자가 오류를 붙여넣으면: 근본 원인을 진단하고, 목표한 수정을 제공하고, 다시 일시 정지합니다
 
-### If developer's turn
+### 개발자의 턴인 경우
 
-1. Render session state block (Phase: GREEN, Turn: DEV)
-2. Display:
+1. 세션 상태 블록 렌더링 (Phase: GREEN, Turn: DEV)
+2. 표시:
    ```
    ## 🟢 GREEN — Your Turn
 
@@ -210,9 +210,9 @@ If the failure is wrong: create an empty stub (no behavior) to resolve the compi
    Type **"done"** or **"green confirmed"** when all tests pass.
    (Or type "skip" to have AI implement it instead)
    ```
-3. PAUSE and wait
+3. 일시 정지하고 기다립니다
 
-### Minimum implementation principle
+### 최소 구현 원칙
 
 ```
 // ✅ Minimum — only what the current test needs
@@ -228,21 +228,21 @@ async getUser(id: string) {
 }
 ```
 
-Add caching, error handling, etc. only when a test requires it.
+캐싱, 오류 처리 등은 테스트에서 요구할 때만 추가합니다.
 
 ---
 
-## REFACTOR Phase
+## REFACTOR 단계
 
-1. Render session state block (Phase: REFACTOR)
-2. Review the test + implementation for:
-   - **Duplication** — same logic in test and implementation?
-   - **Naming** — does the name reveal intent without a comment?
-   - **Magic values** — extract to named constants?
-   - **Method length** — over 10 lines? Consider extraction.
-   - **Framework idioms** — Spring beans, React hooks, pytest fixtures
-   - **Convention consistency** — matches patterns detected in session file?
-3. For each suggestion, display and PAUSE:
+1. 세션 상태 블록 렌더링 (Phase: REFACTOR)
+2. 테스트와 구현을 다음 사항에 대해 검토합니다:
+   - **중복** — 테스트와 구현에 동일한 로직이 있나요?
+   - **명명** — 이름이 주석 없이도 의도를 드러내나요?
+   - **매직 값** — 명명된 상수로 추출할 수 있나요?
+   - **메서드 길이** — 10줄 이상인가요? 추출을 고려하세요.
+   - **프레임워크 관용구** — Spring beans, React hooks, pytest fixtures
+   - **컨벤션 일관성** — 세션 파일에서 감지된 패턴과 일치하나요?
+3. 각 제안에 대해 표시하고 일시 정지합니다:
    ```
    **Refactoring suggestion [N]:** [one-line title]
 
@@ -256,33 +256,33 @@ Add caching, error handling, etc. only when a test requires it.
 
    Apply this refactor? (yes / no / modify)
    ```
-4. If nothing to refactor: "Code looks clean. No refactoring needed this cycle."
-5. After all suggestions resolved:
+4. 리팩토링할 것이 없는 경우: "코드가 깔끔합니다. 이번 사이클에는 리팩토링이 필요하지 않습니다."
+5. 모든 제안이 해결된 후:
    ```
    REFACTOR complete. Are all tests still GREEN?
    Type **"green"** to continue to the next test.
    ```
-6. PAUSE and wait
+6. 일시 정지하고 기다립니다
 
 ---
 
-## Cycle Completion → Role Swap
+## 사이클 완료 → 역할 교체
 
-After REFACTOR:
-- Swap roles (AI ↔ DEV) for the next test in the same task
-- Return to RED with the swapped roles
+REFACTOR 후:
+- 동일한 태스크의 다음 테스트를 위해 역할을 교체합니다 (AI ↔ DEV)
+- 교체된 역할로 RED로 돌아갑니다
 
 ---
 
-## Task Completion
+## 태스크 완료
 
-When the developer indicates the task's tests are done (no more tests to write for this task), or when both parties agree the task is complete:
+개발자가 태스크의 테스트가 완료되었음을 알리거나 (더 이상 이 태스크에 대한 테스트가 없는 경우), 또는 양측이 태스크가 완료되었다고 동의하는 경우:
 
-1. Update `.tdd-sessions/{story-id}.md`:
-   - Mark current task as `✅ done`
-   - If a next task exists, the next `/tdd-task` invocation will pick it up automatically
+1. `.tdd-sessions/{story-id}.md`를 업데이트합니다:
+   - 현재 태스크를 `✅ done`으로 표시합니다
+   - 다음 태스크가 있는 경우, 다음 `/tdd-task` 호출 시 자동으로 감지됩니다
 
-2. Display:
+2. 표시:
    ```
    ✅ Task [N] complete: [task title]
 
@@ -294,10 +294,10 @@ When the developer indicates the task's tests are done (no more tests to write f
 
 ---
 
-## Reference Files
+## 참조 파일
 
-| File | When to read |
+| 파일 | 읽는 시점 |
 |------|-------------|
-| `.agents/skills/ping-pong-tdd/references/tdd-test-writing-guide.md` | Full test patterns per stack |
-| `.agents/skills/ping-pong-tdd/references/convention-detection.md` | Per-stack convention extraction |
-| `.agents/skills/ping-pong-tdd/references/red-green-refactor-guide.md` | Detailed phase completion criteria |
+| `.agents/skills/tdd-task/references/tdd-test-writing-guide.md` | 스택별 전체 테스트 패턴 |
+| `.agents/skills/tdd-task/references/convention-detection.md` | 스택별 컨벤션 추출 |
+| `.agents/skills/tdd-task/references/red-green-refactor-guide.md` | 상세 단계 완료 기준 |

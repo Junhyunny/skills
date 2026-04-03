@@ -1,10 +1,10 @@
-# Task Plan Template
+# 태스크 계획 템플릿
 
-Generated at the end of Phase 2 (Collaborative Planning). Display this in the conversation when presenting the initial task breakdown and after each revision.
+Phase 2(협업 계획) 종료 시 생성됩니다. 초기 태스크 분류를 제시할 때와 각 수정 후 대화에 표시하세요.
 
 ---
 
-## Task Plan Format
+## 태스크 계획 형식
 
 ```markdown
 ## Task Plan
@@ -70,30 +70,30 @@ Please review the plan.
 
 ---
 
-## Filling in the Template — Guidelines
+## 템플릿 작성 가이드라인
 
-### Task titles
-- Use noun phrases: "UserService.updateProfile", "PATCH /api/users/:id endpoint", "Profile edit E2E flow"
-- Be specific enough to know when it's done
-- Avoid vague titles like "Backend work" or "Tests"
+### 태스크 제목
+- 명사구 사용: "UserService.updateProfile", "PATCH /api/users/:id endpoint", "Profile edit E2E flow"
+- 완료 여부를 알 수 있을 만큼 구체적으로
+- "Backend work"나 "Tests" 같은 모호한 제목 금지
 
-### Task type selection
-- `unit` — tests a single class/function in isolation with mocks
-- `integration` — tests a component with real dependencies (DB, HTTP layer, frameworks)
-- `e2e` — tests a full user flow through the UI or API boundary
+### 태스크 유형 선택
+- `unit` — 모킹을 통해 단일 클래스/함수를 독립적으로 테스트
+- `integration` — 실제 의존성(DB, HTTP 레이어, 프레임워크)과 함께 컴포넌트를 테스트
+- `e2e` — UI 또는 API 경계를 통한 전체 사용자 플로우를 테스트
 
-### Task ordering heuristics
-1. Domain/service layer first (pure business logic, most testable)
-2. Repository/data layer second (persistence)
-3. API/controller layer third (HTTP interface)
-4. E2E last (verifies the full assembled system)
+### 태스크 순서 결정 기준
+1. 도메인/서비스 레이어 먼저 (순수 비즈니스 로직, 가장 테스트하기 쉬움)
+2. 레포지토리/데이터 레이어 두 번째 (영속성)
+3. API/컨트롤러 레이어 세 번째 (HTTP 인터페이스)
+4. E2E 마지막 (전체 조립된 시스템 검증)
 
-### Number of tasks
-- Simple story (1-2 ACs): 2-3 tasks + 1 E2E
-- Medium story (3-4 ACs): 3-5 tasks + 1 E2E
-- Complex story: consider splitting the story before planning tasks
+### 태스크 수
+- 단순한 스토리 (AC 1-2개): 2-3 태스크 + E2E 1개
+- 중간 스토리 (AC 3-4개): 3-5 태스크 + E2E 1개
+- 복잡한 스토리: 태스크 계획 전에 스토리 분할 고려
 
-### E2E task scope
-- One E2E task per story is usually enough
-- The E2E test should cover the primary happy path from the story
-- Edge cases are covered by unit/integration tests
+### E2E 태스크 범위
+- 스토리당 E2E 태스크 하나면 보통 충분
+- E2E 테스트는 스토리의 주요 해피 패스를 커버해야 함
+- 엣지 케이스는 단위/통합 테스트가 커버

@@ -1,10 +1,10 @@
-# Commit Message Template
+# 커밋 메시지 템플릿
 
-Use this template when generating the commit message in Phase 4.
+Phase 4에서 커밋 메시지를 생성할 때 이 템플릿을 사용하세요.
 
 ---
 
-## Standard Session Commit
+## 표준 세션 커밋
 
 ```
 feat(<scope>): <short description under 72 chars>
@@ -21,9 +21,9 @@ TDD: ping-pong pair programming session
 
 ---
 
-## Examples
+## 예시
 
-### TypeScript + React feature
+### TypeScript + React 기능
 
 ```
 feat(user-profile): add profile name and email update
@@ -39,7 +39,7 @@ Tasks completed:
 TDD: ping-pong pair programming session
 ```
 
-### Kotlin + Spring feature
+### Kotlin + Spring 기능
 
 ```
 feat(payment): add payment intent creation endpoint
@@ -55,7 +55,7 @@ Tasks completed:
 TDD: ping-pong pair programming session
 ```
 
-### Python + FastAPI bug fix
+### Python + FastAPI 버그 수정
 
 ```
 fix(orders): correct rounding error in order total calculation
@@ -74,13 +74,13 @@ TDD: ping-pong pair programming session
 
 ---
 
-## Scope Selection Guide
+## 스코프 선택 가이드
 
-| Stack | Good scope examples |
-|-------|-------------------|
+| 스택 | 좋은 스코프 예시 |
+|------|----------------|
 | TypeScript + React | `user-profile`, `cart`, `checkout`, `auth`, `dashboard` |
 | Kotlin + Spring | `user-service`, `payment`, `order`, `notification`, `auth` |
-| Java + Spring | same as Kotlin |
+| Java + Spring | Kotlin과 동일 |
 | Python + FastAPI | `users`, `products`, `orders`, `auth`, `analytics` |
 
-Use the feature/module name that best describes what was changed, not the technical layer.
+변경된 내용을 가장 잘 설명하는 기능/모듈명을 사용하고, 기술 레이어명은 사용하지 마세요.

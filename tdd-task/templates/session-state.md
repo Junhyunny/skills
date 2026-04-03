@@ -1,11 +1,11 @@
-# Session State Template
+# 세션 상태 템플릿
 
-This template is rendered inline in the conversation before every AI action.
-Do NOT create a separate file — render it as a markdown block.
+이 템플릿은 모든 AI 액션 이전에 대화 내에서 인라인으로 렌더링됩니다.
+별도 파일을 생성하지 마세요 — 마크다운 블록으로 렌더링하세요.
 
 ---
 
-## Full State Block (copy and fill in)
+## 전체 상태 블록 (복사하여 입력)
 
 ```markdown
 ---
@@ -24,9 +24,9 @@ Do NOT create a separate file — render it as a markdown block.
 ---
 ```
 
----
+---/
 
-## Task Progress Block (show alongside state in Phase 3)
+## 태스크 진행 블록 (Phase 3에서 상태와 함께 표시)
 
 ```markdown
 ### Task Progress
@@ -39,26 +39,26 @@ Do NOT create a separate file — render it as a markdown block.
 
 ---
 
-## State Values Reference
+## 상태 값 참조
 
-### Phase values
-- `PLANNING` — Phase 2, working on task breakdown
-- `RED` — Writing a failing test
-- `GREEN` — Writing minimum implementation
-- `REFACTOR` — Reviewing and improving code quality
+### Phase 값
+- `PLANNING` — Phase 2, 태스크 분류 작업 중
+- `RED` — 실패하는 테스트 작성 중
+- `GREEN` — 최소 구현 작성 중
+- `REFACTOR` — 코드 품질 검토 및 개선 중
 
-### Turn values
-- `DEV` — Developer's turn (AI is waiting)
-- `AI` — AI's turn (AI is acting)
+### Turn 값
+- `DEV` — 개발자의 차례 (AI 대기 중)
+- `AI` — AI의 차례 (AI 행동 중)
 
-### Status values (task progress)
-- `⏳ pending` — Not started
-- `🔄 active` — Currently in progress
-- `✅ done` — All tests pass, refactoring complete
+### Status 값 (태스크 진행)
+- `⏳ pending` — 시작 전
+- `🔄 active` — 현재 진행 중
+- `✅ done` — 모든 테스트 통과, 리팩토링 완료
 
 ---
 
-## Example: Filled State Block
+## 예시: 작성된 상태 블록
 
 ```markdown
 ---

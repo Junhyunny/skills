@@ -1,14 +1,14 @@
-# Convention Detection Guide
+# 컨벤션 감지 가이드
 
-When running a ping-pong TDD session in an existing project, the AI must first read the project's existing code so that new tests and implementation fit naturally into the surrounding style.
+기존 프로젝트에서 ping-pong TDD 세션을 진행할 때, AI는 먼저 프로젝트의 기존 코드를 읽어 새로운 테스트와 구현이 주변 스타일에 자연스럽게 맞도록 해야 합니다.
 
-**Principle: The project's actual code takes precedence over default patterns.**
+**원칙: 프로젝트의 실제 코드가 기본 패턴보다 우선합니다.**
 
 ---
 
-## When to Run
+## 실행 시점
 
-Execute at Phase 2 Step 2, immediately after stack detection.
+Phase 2 Step 2에서, 스택 감지 직후에 실행합니다.
 
 ```
 No test/source files found → new project → use default patterns from tdd-test-writing-guide.md
@@ -17,11 +17,11 @@ Test/source files exist    → existing project → follow this guide to read co
 
 ---
 
-## Universal: Files to Read
+## 공통: 읽을 파일
 
-Check these regardless of stack.
+스택에 관계없이 확인합니다.
 
-### 1. Priority: Files from the Same Area as the Story
+### 1. 우선순위: 스토리와 동일한 영역의 파일
 
 ```
 If the current story is about a "cart" feature:
@@ -29,22 +29,22 @@ If the current story is about a "cart" feature:
   → Fallback: the 2–3 most recently modified test files in the project
 ```
 
-### 2. Code Style Config Files
+### 2. 코드 스타일 설정 파일
 
-| File | Stack | What to Check |
-|------|-------|--------------|
-| `.eslintrc*`, `eslint.config.*` | TypeScript | semicolons, quotes, import order |
-| `prettier.config.*`, `.prettierrc` | TypeScript | indentation, line length |
-| `.editorconfig` | universal | tab/space indentation, line endings |
-| `detekt.yml`, `.detekt.yml` | Kotlin | function length, complexity thresholds |
-| `pyproject.toml` `[tool.black]` | Python | line length |
-| `pyproject.toml` `[tool.ruff]` | Python | lint rules |
+| 파일 | 스택 | 확인 사항 |
+|------|------|----------|
+| `.eslintrc*`, `eslint.config.*` | TypeScript | 세미콜론, 따옴표, import 순서 |
+| `prettier.config.*`, `.prettierrc` | TypeScript | 들여쓰기, 줄 길이 |
+| `.editorconfig` | 공통 | 탭/공백 들여쓰기, 줄 끝 문자 |
+| `detekt.yml`, `.detekt.yml` | Kotlin | 함수 길이, 복잡도 임계값 |
+| `pyproject.toml` `[tool.black]` | Python | 줄 길이 |
+| `pyproject.toml` `[tool.ruff]` | Python | 린트 규칙 |
 
 ---
 
 ## TypeScript + React
 
-### Files to Read
+### 읽을 파일
 
 ```
 1. 2–3 existing test files
@@ -55,9 +55,9 @@ If the current story is about a "cart" feature:
    Prefer: same layer as the story (service, hook, component, etc.)
 ```
 
-### Conventions to Extract
+### 추출할 컨벤션
 
-**Test structure**
+**테스트 구조**
 
 ```typescript
 // Pattern A: describe + it (most common)
@@ -76,13 +76,13 @@ describe('ServiceName', () => {
 test('ServiceName should ...', () => { ... })
 ```
 
-**Identify:**
-- Does the project use `it` or `test`?
-- How many levels of `describe` nesting?
-- Test name format: `'should X when Y'` vs `'X when Y should Z'`
-- Where does `beforeEach` / `afterEach` live (inside or outside `describe`)?
+**확인 사항:**
+- 프로젝트가 `it` 또는 `test`를 사용하는가?
+- `describe` 중첩 레벨은 몇 단계인가?
+- 테스트명 형식: `'should X when Y'` vs `'X when Y should Z'`
+- `beforeEach` / `afterEach`의 위치 (`describe` 내부 또는 외부)?
 
-**Mock patterns**
+**Mock 패턴**
 
 ```typescript
 // Pattern A: vi.mock (module-level)
@@ -97,10 +97,7 @@ const sut = new UserService(mockRepository as UserRepository)
 jest.spyOn(userService, 'getUser').mockResolvedValue(...)
 ```
 
-**Assertion patterns**
-
-```typescript
-// Vitest/Jest default
+**Assertion 패턴**
 expect(result).toEqual(expected)
 expect(result).toBe(expected)
 expect(fn).toHaveBeenCalledWith(arg)
@@ -110,7 +107,7 @@ expect(element).toBeInTheDocument()
 expect(element).toHaveTextContent('...')
 ```
 
-**Source file conventions**
+**소스 파일 컨벤션**
 
 ```typescript
 // Class vs functional style
@@ -127,7 +124,7 @@ throw new UserNotFoundError(id)           // custom error class
 return { ok: false, error: 'NOT_FOUND' } // Result pattern
 ```
 
-**File/directory structure**
+**파일/디렉토리 구조**
 
 ```
 Feature-based:           Layer-based:
@@ -144,7 +141,7 @@ src/
 
 ## Kotlin + Spring
 
-### Files to Read
+### 읽을 파일
 
 ```
 1. 2–3 test files
@@ -159,9 +156,9 @@ src/
    (kotest vs JUnit5, mockk vs mockito-kotlin, etc.)
 ```
 
-### Conventions to Extract
+### 추출할 컨벤션
 
-**Test class structure**
+**테스트 클래스 구조**
 
 ```kotlin
 // Pattern A: JUnit5 + @Nested (hierarchical)
@@ -188,7 +185,7 @@ class UserServiceTest : BehaviorSpec({
 })
 ```
 
-**Mock patterns**
+**Mock 패턴**
 
 ```kotlin
 // MockK (most common)
@@ -206,7 +203,7 @@ verify(repo).findById(userId)
 @MockBean private lateinit var userService: UserService
 ```
 
-**Assertion patterns**
+**Assertion 패턴**
 
 ```kotlin
 // AssertJ (most common)
@@ -222,7 +219,7 @@ assertEquals(expected, result)
 assertThrows<UserNotFoundException> { sut.getUser(id) }
 ```
 
-**Source file conventions**
+**소스 파일 컨벤션**
 
 ```kotlin
 // Package/directory structure — layer-based vs domain-based
@@ -245,7 +242,7 @@ throw NotFoundException(ErrorCode.USER_NOT_FOUND)       // shared exception + er
 return Result.failure(UserNotFoundError)                // Result type
 ```
 
-**Package naming conventions**
+**패키지 명명 규칙**
 
 ```
 domain/ vs entity/ vs model/           → domain objects
@@ -258,7 +255,7 @@ controller/ vs web/ vs adapter/in/     → controllers
 
 ## Java + Spring
 
-### Files to Read
+### 읽을 파일
 
 ```
 1. 2–3 test files: src/test/java/.../**Test.java
@@ -266,9 +263,9 @@ controller/ vs web/ vs adapter/in/     → controllers
 3. Build file: test dependencies in pom.xml or build.gradle
 ```
 
-### Conventions to Extract
+### 추출할 컨벤션
 
-**Test class structure**
+**테스트 클래스 구조**
 
 ```java
 // Pattern A: JUnit5 + @Nested
@@ -288,7 +285,7 @@ class UserServiceTest {
 }
 ```
 
-**Method naming**
+**메서드 명명**
 
 ```java
 // camelCase verb form (most common)
@@ -297,7 +294,7 @@ void givenUserExists_whenGetUser_thenReturnUser()  // Given-When-Then style
 void getUser_existingUser_returnsUser()             // underscore-separated
 ```
 
-**Mock patterns**
+**Mock 패턴**
 
 ```java
 // @ExtendWith(MockitoExtension.class) + annotations
@@ -313,7 +310,7 @@ given(repo.findById(id)).willReturn(Optional.of(user));
 then(repo).should().findById(id);
 ```
 
-**Source file conventions**
+**소스 파일 컨벤션**
 
 ```java
 // Constructor annotations
@@ -333,7 +330,7 @@ throw new BusinessException(ErrorCode.USER_NOT_FOUND)       // error code enum
 
 ## Python + FastAPI
 
-### Files to Read
+### 읽을 파일
 
 ```
 1. 2–3 test files: tests/**test_*.py or tests/**/*_test.py
@@ -342,9 +339,9 @@ throw new BusinessException(ErrorCode.USER_NOT_FOUND)       // error code enum
 4. pytest.ini or pyproject.toml [tool.pytest.ini_options]: test configuration
 ```
 
-### Conventions to Extract
+### 추출할 컨벤션
 
-**Test structure**
+**테스트 구조**
 
 ```python
 # Pattern A: class-based
@@ -370,7 +367,7 @@ async def test_should_return_user_when_exists(async_client):
     ...
 ```
 
-**Fixture patterns**
+**픽스처 패턴**
 
 ```python
 # Check conftest.py for shared fixtures
@@ -383,7 +380,7 @@ def async_client(app):
     return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")
 ```
 
-**Mock patterns**
+**Mock 패턴**
 
 ```python
 # unittest.mock
@@ -397,7 +394,7 @@ def test_something(mocker):
     mock_fn = mocker.patch('app.services.some_function')
 ```
 
-**Source file conventions**
+**소스 파일 컨벤션**
 
 ```python
 # Dependency injection
@@ -419,7 +416,7 @@ raise UserNotFoundException(user_id)                             # custom except
 return None  # return None, handle in router
 ```
 
-**Naming conventions**
+**명명 규칙**
 
 ```python
 # File names: snake_case
@@ -435,9 +432,9 @@ async def find_by_id(self, user_id: str)
 
 ---
 
-## Convention Priority Rules
+## 컨벤션 우선순위 규칙
 
-When existing code conflicts with the default guide:
+기존 코드가 기본 가이드와 충돌하는 경우:
 
 ```
 Priority 1: Patterns directly observed in existing project code
@@ -445,7 +442,7 @@ Priority 2: Code style config files (.eslintrc, detekt, etc.)
 Priority 3: Default patterns from tdd-test-writing-guide.md
 ```
 
-**Example — default pattern vs project pattern conflict:**
+**예시 — 기본 패턴 vs 프로젝트 패턴 충돌:**
 
 ```typescript
 // tdd-test-writing-guide.md default: vi.mock() module approach
@@ -459,21 +456,21 @@ const sut = new UserService(mockRepo as UserRepository)
 
 ---
 
-## Caveats
+## 주의사항
 
-### Prefer recently modified files
+### 최근 수정된 파일 우선
 
-- When selecting test files, prefer the most recently modified ones
-- If legacy and modern patterns coexist, follow the more prevalent one
-- When uncertain, ask the developer: "I see both pattern A and pattern B in the codebase. Which do you prefer for new code?"
+- 테스트 파일을 선택할 때, 가장 최근에 수정된 파일을 우선 선택
+- 레거시 패턴과 최신 패턴이 공존하는 경우, 더 일반적인 것을 따름
+- 불확실한 경우, 개발자에게 질문: "코드베이스에 패턴 A와 패턴 B가 모두 있습니다. 새 코드에는 어느 것을 선호하시나요?"
 
-### Fallback on detection failure
+### 감지 실패 시 폴백
 
-- If a file was read but a specific pattern cannot be determined: use the default pattern, then revisit in REFACTOR
-- Never halt the session progress due to a detection failure
+- 파일을 읽었지만 특정 패턴을 판단할 수 없는 경우: 기본 패턴을 사용하고 REFACTOR에서 재검토
+- 감지 실패로 인해 세션 진행을 중단하지 않음
 
-### When the developer writes code that differs from conventions
+### 개발자가 컨벤션과 다른 코드를 작성할 때
 
-If the developer pastes a test in RED that does not match detected conventions:
-- If the test intent is clear, proceed as-is (flag the convention difference in REFACTOR)
-- In REFACTOR: "Existing tests use `vi.mock()` but this test uses direct injection. Would you like to align with the project convention?"
+개발자가 감지된 컨벤션과 맞지 않는 RED 테스트를 붙여넣는 경우:
+- 테스트 의도가 명확하다면, 그대로 진행 (REFACTOR에서 컨벤션 차이를 표시)
+- REFACTOR에서: "기존 테스트는 `vi.mock()`을 사용하지만 이 테스트는 직접 주입을 사용합니다. 프로젝트 컨벤션에 맞추시겠습니까?"

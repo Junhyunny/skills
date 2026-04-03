@@ -1,10 +1,10 @@
 ---
 name: tdd-commit
 description: >
-  Final step of a ping-pong TDD session. Reads the active session file from
-  .tdd-sessions/ to summarize completed tasks, proposes a Conventional Commits
-  message, executes the commit, and cleans up the session file.
-  Run after all /tdd-task invocations are done.
+  ping-pong TDD 세션의 마지막 단계입니다. .tdd-sessions/에서 활성 세션 파일을 읽어
+  완료된 태스크를 요약하고, Conventional Commits 메시지를 제안하며,
+  커밋을 실행하고 세션 파일을 정리합니다.
+  모든 /tdd-task 호출이 완료된 후 실행합니다.
 version: 1.0.0
 category: engineering
 tags: [tdd, pair-programming, ping-pong, commit, git]
@@ -16,38 +16,38 @@ triggers:
 
 # TDD Commit
 
-## Invocation
+## 호출 방법
 
 ```
 /tdd-commit [story-id]
 ```
 
-- **No argument** — auto-detect the active session file from `.tdd-sessions/`
-- **Story ID provided** — use `.tdd-sessions/{story-id}.md` directly
+- **인수 없음** — `.tdd-sessions/`에서 활성 세션 파일을 자동 감지
+- **스토리 ID 제공** — `.tdd-sessions/{story-id}.md`를 직접 사용
 
 ---
 
-## Step 1: Locate Session File
+## 1단계: 세션 파일 찾기
 
-1. List files in `.tdd-sessions/`
-2. **If the directory does not exist or is empty:**
+1. `.tdd-sessions/` 내 파일 목록 조회
+2. **디렉토리가 존재하지 않거나 비어 있는 경우:**
    ```
    "No active TDD session found. Run /tdd-plan to start a new session."
    ```
-   STOP.
-3. **If exactly one file exists:** use it
-4. **If multiple files exist:**
+   중단.
+3. **파일이 정확히 하나인 경우:** 해당 파일 사용
+4. **파일이 여러 개인 경우:**
    ```
    "Multiple sessions found. Which story are you committing?
    [1] 12345678.md — User Profile Update
    [2] payment-intent-2026-03-31.md — (no ID)
    Type the number or story ID."
    ```
-   PAUSE and wait for selection.
+   일시 중지하고 선택을 기다림.
 
 ---
 
-## Step 2: Display Changes Summary
+## 2단계: 변경 사항 요약 출력
 
 ```markdown
 ## Changes Summary
@@ -64,13 +64,13 @@ triggers:
 - [list any ⏳ pending tasks, or "none — all tasks complete"]
 ```
 
-If there are pending tasks, note: "These tasks were not completed and will not be included in this commit."
+미완료 태스크가 있는 경우 다음을 표시: "이 태스크들은 완료되지 않았으며 이번 커밋에 포함되지 않습니다."
 
 ---
 
-## Step 3: Propose Commit Message
+## 3단계: 커밋 메시지 제안
 
-Use Conventional Commits format:
+Conventional Commits 형식 사용:
 
 ```
 feat(<scope>): <short description under 72 chars>
@@ -85,27 +85,27 @@ Tasks completed:
 TDD: ping-pong pair programming session
 ```
 
-### Scope selection
+### 스코프 선택
 
-Use the feature/domain name — not the technical layer:
+기술 레이어가 아닌 기능/도메인 이름을 사용:
 
-| Context | Example scope |
+| 컨텍스트 | 스코프 예시 |
 |---------|-------------|
 | TypeScript React | `user-profile`, `cart`, `checkout`, `auth` |
 | Kotlin/Java Spring | `payment`, `order`, `user-service`, `notification` |
 | Python FastAPI | `users`, `products`, `orders`, `auth` |
 
-### Type selection
+### 타입 선택
 
-| Situation | Type |
+| 상황 | 타입 |
 |-----------|------|
-| New feature (most common) | `feat` |
-| Bug fix | `fix` |
-| Refactoring only, no new behavior | `refactor` |
+| 새 기능 (가장 일반적) | `feat` |
+| 버그 수정 | `fix` |
+| 리팩토링만, 새로운 동작 없음 | `refactor` |
 
 ---
 
-## Step 4: Show Commit Preview and PAUSE
+## 4단계: 커밋 미리보기 출력 후 일시 중지
 
 ```markdown
 ## Commit Preview
@@ -125,24 +125,24 @@ Ready to commit?
 → Type **"cancel"** to exit without committing
 ```
 
-PAUSE and wait.
+일시 중지하고 기다림.
 
 ---
 
-## Step 5: Execute Commit
+## 5단계: 커밋 실행
 
-When developer confirms:
+개발자가 확인하면:
 
-1. Stage all source and test files from the session (never stage: `.env`, `.env.*`, build artifacts like `target/`, `build/`, `dist/`, `__pycache__/`, `.gradle/`)
-2. Run `git add [files]` then `git commit -m "[message]"`
-3. Display the resulting commit hash:
+1. 세션의 모든 소스 및 테스트 파일을 스테이징 (스테이징 금지: `.env`, `.env.*`, `target/`, `build/`, `dist/`, `__pycache__/`, `.gradle/` 등 빌드 아티팩트)
+2. `git add [files]` 후 `git commit -m "[message]"` 실행
+3. 결과 커밋 해시 출력:
    ```
    ✅ Committed: abc1234 feat(payment): add payment intent creation endpoint
    ```
 
 ---
 
-## Step 6: Clean Up Session File
+## 6단계: 세션 파일 정리
 
 ```
 Delete `.tdd-sessions/[filename]`? (yes / no)
@@ -150,14 +150,14 @@ Delete `.tdd-sessions/[filename]`? (yes / no)
 → "no" — keep it (useful if the story spans multiple sessions)
 ```
 
-PAUSE and wait. Execute accordingly.
+일시 중지하고 기다림. 응답에 따라 실행.
 
-If `.tdd-sessions/` is now empty after deletion, it can be left in place — it is already gitignored.
+삭제 후 `.tdd-sessions/`가 비어 있어도 그대로 두면 됩니다 — 이미 gitignore에 등록되어 있습니다.
 
 ---
 
-## Reference Files
+## 레퍼런스 파일
 
-| File | When to read |
+| 파일 | 읽는 시점 |
 |------|-------------|
-| `.agents/skills/ping-pong-tdd/references/commit-conventions.md` | Full commit format rules and multi-session strategy |
+| `.agents/skills/tdd-commit/references/commit-conventions.md` | 전체 커밋 형식 규칙 및 멀티 세션 전략 |

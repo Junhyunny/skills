@@ -1,20 +1,20 @@
-# TDD Test Writing Guide
+# TDD 테스트 작성 가이드
 
-Detailed test patterns for each supported stack. A good failing test:
-1. Compiles/parses without syntax errors
-2. Fails at runtime for the **right reason** (assertion failure or missing implementation — NOT import error or wrong test setup)
-3. Has a descriptive name readable as a specification sentence
-4. Is focused on a single behavior
+지원되는 각 스택에 대한 상세 테스트 패턴입니다. 올바른 실패 테스트란:
+1. 구문 오류 없이 컴파일/파싱됨
+2. **올바른 이유**로 런타임에 실패함 (assertion 실패 또는 구현 누락 — import 오류나 잘못된 테스트 설정이 아님)
+3. 사양 문장으로 읽히는 설명적인 이름을 가짐
+4. 단일 동작에 집중함
 
 ---
 
 ## TypeScript + React
 
-### Frameworks
-- **Unit/Component:** Vitest + @testing-library/react OR Jest + @testing-library/react
+### 프레임워크
+- **단위/컴포넌트:** Vitest + @testing-library/react OR Jest + @testing-library/react
 - **E2E:** Playwright OR Cypress
 
-### File Location Conventions
+### 파일 위치 규칙
 ```
 src/
   components/
@@ -28,7 +28,7 @@ e2e/
   user-profile.spec.ts       ← Playwright E2E
 ```
 
-### Unit Test Anatomy (Vitest)
+### 단위 테스트 구조 (Vitest)
 
 ```typescript
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -72,7 +72,7 @@ describe('UserProfile', () => {
 })
 ```
 
-### Service Unit Test (Vitest)
+### 서비스 단위 테스트 (Vitest)
 
 ```typescript
 import { describe, it, expect, vi } from 'vitest'
@@ -97,25 +97,25 @@ describe('UserService', () => {
 })
 ```
 
-### Naming Conventions
+### 명명 규칙
 - `it('should [expected behavior] when [context]', ...)`
-- Use `describe` for the component/service name, `it` for behaviors
-- Avoid "test that", "verify that" — start directly with "should"
+- 컴포넌트/서비스 이름에 `describe`, 동작에 `it` 사용
+- "test that", "verify that" 사용 금지 — "should"로 직접 시작
 
-### What a Correct RED Failure Looks Like
+### 올바른 RED 실패 모습
 ```
 FAIL src/services/UserService.test.ts
   UserService > should return user when user exists
     TypeError: sut.getUser is not a function
     ← method does not exist yet → correct RED
 ```
-NOT this (wrong reason):
+다음과 같은 경우는 안 됩니다 (잘못된 이유):
 ```
     SyntaxError: Cannot find module './UserService'
     ← file doesn't exist → fix the import, not the test
 ```
 
-### E2E Test (Playwright)
+### E2E 테스트 (Playwright)
 
 ```typescript
 // e2e/user-profile.spec.ts
@@ -143,12 +143,12 @@ test.describe('User Profile', () => {
 
 ## Kotlin + Spring
 
-### Frameworks
-- **Unit:** JUnit5 + MockK + AssertJ (or Kotest)
-- **Integration:** @SpringBootTest + MockMvc or Testcontainers
+### 프레임워크
+- **단위:** JUnit5 + MockK + AssertJ (또는 Kotest)
+- **통합:** @SpringBootTest + MockMvc 또는 Testcontainers
 - **E2E:** RestAssured
 
-### File Location Conventions
+### 파일 위치 규칙
 ```
 src/
   main/kotlin/com/example/
@@ -165,7 +165,7 @@ src/
       UserApiTest.kt           ← RestAssured E2E
 ```
 
-### Unit Test Anatomy
+### 단위 테스트 구조
 
 ```kotlin
 import io.mockk.*
@@ -223,7 +223,7 @@ class UserServiceTest {
 }
 ```
 
-### Controller Integration Test (@WebMvcTest)
+### 컨트롤러 통합 테스트 (@WebMvcTest)
 
 ```kotlin
 @WebMvcTest(UserController::class)
@@ -263,7 +263,7 @@ class UserControllerTest {
 }
 ```
 
-### E2E Test (RestAssured)
+### E2E 테스트 (RestAssured)
 
 ```kotlin
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -296,12 +296,12 @@ class UserApiTest {
 }
 ```
 
-### Naming Conventions
+### 명명 규칙
 - `@DisplayName("should [behavior] when [context]")`
-- Backtick function names in Kotlin for readability: `` `should return user when user exists` ``
-- Use `@Nested` with `@DisplayName` to group by method/feature
+- 가독성을 위한 Kotlin 백틱 함수명: `` `should return user when user exists` ``
+- 메서드/기능별 그룹화를 위해 `@Nested`와 `@DisplayName` 사용
 
-### What a Correct RED Failure Looks Like
+### 올바른 RED 실패 모습
 ```
 UserServiceTest > getUser > should return user when user exists FAILED
   io.mockk.MockKException: no answer found for: UserRepository(#1).findById(UserId(value=user-123))
@@ -312,12 +312,12 @@ UserServiceTest > getUser > should return user when user exists FAILED
 
 ## Java + Spring
 
-### Frameworks
-- **Unit:** JUnit5 + Mockito + AssertJ
-- **Integration:** @SpringBootTest + MockMvc or Testcontainers
+### 프레임워크
+- **단위:** JUnit5 + Mockito + AssertJ
+- **통합:** @SpringBootTest + MockMvc 또는 Testcontainers
 - **E2E:** RestAssured
 
-### File Location Conventions
+### 파일 위치 규칙
 ```
 src/
   main/java/com/example/
@@ -329,7 +329,7 @@ src/
     web/UserApiTest.java
 ```
 
-### Unit Test Anatomy
+### 단위 테스트 구조
 
 ```java
 import org.junit.jupiter.api.*;
@@ -381,7 +381,7 @@ class UserServiceTest {
 }
 ```
 
-### Controller Integration Test
+### 컨트롤러 통합 테스트
 
 ```java
 @WebMvcTest(UserController.class)
@@ -408,21 +408,21 @@ class UserControllerTest {
 }
 ```
 
-### Naming Conventions
-- `@DisplayName("should [behavior] when [context]")` for test methods
-- Method names in camelCase: `shouldReturnUserWhenUserExists`
-- Use `@Nested` to group related tests
+### 명명 규칙
+- 테스트 메서드에 `@DisplayName("should [behavior] when [context]")` 사용
+- camelCase 메서드명: `shouldReturnUserWhenUserExists`
+- 관련 테스트 그룹화를 위해 `@Nested` 사용
 
 ---
 
 ## Python + FastAPI
 
-### Frameworks
-- **Unit:** pytest + unittest.mock
-- **Integration:** pytest + httpx (AsyncClient with ASGITransport)
-- **E2E:** pytest + playwright (optional)
+### 프레임워크
+- **단위:** pytest + unittest.mock
+- **통합:** pytest + httpx (ASGITransport를 사용한 AsyncClient)
+- **E2E:** pytest + playwright (선택 사항)
 
-### File Location Conventions
+### 파일 위치 규칙
 ```
 app/
   domain/
@@ -439,7 +439,7 @@ tests/
     test_user_profile.py     ← Playwright E2E
 ```
 
-### Unit Test Anatomy
+### 단위 테스트 구조
 
 ```python
 # tests/unit/test_user_service.py
@@ -475,7 +475,7 @@ class TestUserServiceGetUser:
             self.sut.get_user("nonexistent")
 ```
 
-### Async Unit Test
+### 비동기 단위 테스트
 
 ```python
 import pytest
@@ -496,7 +496,7 @@ class TestAsyncUserService:
         assert result["name"] == "Alice"
 ```
 
-### Integration Test (httpx + FastAPI)
+### 통합 테스트 (httpx + FastAPI)
 
 ```python
 # tests/integration/test_users_api.py
@@ -524,7 +524,7 @@ async def test_should_return_404_when_user_does_not_exist():
     assert "not found" in response.json()["detail"].lower()
 ```
 
-### E2E Test (Playwright Python)
+### E2E 테스트 (Playwright Python)
 
 ```python
 # tests/e2e/test_user_profile.py
@@ -553,19 +553,19 @@ async def test_should_display_updated_name_after_profile_edit():
         await browser.close()
 ```
 
-### Naming Conventions
-- Function names: `test_should_[behavior]_when_[context]`
-- Class names: `TestServiceNameMethodName`
-- Use `pytest.mark.asyncio` for async tests
-- Use `conftest.py` for shared fixtures
+### 명명 규칙
+- 함수명: `test_should_[behavior]_when_[context]`
+- 클래스명: `TestServiceNameMethodName`
+- 비동기 테스트에 `pytest.mark.asyncio` 사용
+- 공유 픽스처에 `conftest.py` 사용
 
-### What a Correct RED Failure Looks Like
+### 올바른 RED 실패 모습
 ```
 FAILED tests/unit/test_user_service.py::TestUserServiceGetUser::test_should_return_user_when_user_exists
   AttributeError: 'UserService' object has no attribute 'get_user'
   ← method doesn't exist yet → correct RED
 ```
-NOT this (wrong reason):
+다음과 같은 경우는 안 됩니다 (잘못된 이유):
 ```
   ImportError: cannot import name 'UserService' from 'app.domain.user_service'
   ← module doesn't exist → create the module first
@@ -573,13 +573,13 @@ NOT this (wrong reason):
 
 ---
 
-## Common Antipatterns to Avoid
+## 흔한 안티패턴
 
-| Antipattern | Problem | Fix |
-|-------------|---------|-----|
-| Testing implementation details | Test breaks on refactor | Test behavior, not method calls |
-| Too many assertions in one test | Hard to diagnose failure | One behavior per test |
-| Mocking what you own | Hides integration bugs | Mock external deps only |
-| Test names like `test1`, `testGetUser` | Not readable as spec | Use full sentence: `should return user when exists` |
-| Setup in test body instead of fixture | Duplication | Use `beforeEach` / `setUp` / pytest fixture |
-| Asserting on mock call count unnecessarily | Brittle | Assert on outcome, not internals |
+| 안티패턴 | 문제 | 해결 방법 |
+|----------|------|----------|
+| 구현 세부사항 테스트 | 리팩토링 시 테스트 깨짐 | 메서드 호출이 아닌 동작을 테스트 |
+| 한 테스트에 너무 많은 assertion | 실패 원인 파악 어려움 | 테스트당 단일 동작 |
+| 소유한 것을 모킹 | 통합 버그 숨김 | 외부 의존성만 모킹 |
+| `test1`, `testGetUser` 같은 테스트명 | 사양으로 읽히지 않음 | 완전한 문장 사용: `should return user when exists` |
+| 픽스처 대신 테스트 본문에 설정 | 중복 | `beforeEach` / `setUp` / pytest 픽스처 사용 |
+| 불필요한 모크 호출 횟수 검증 | 취약함 | 내부가 아닌 결과를 검증 |
