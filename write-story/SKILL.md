@@ -61,20 +61,11 @@ STOP.
 
 사용자 스토리는 구체적인 페르소나 없이 작성할 수 없습니다.
 먼저 `.agents/skills/write-story/references/persona.md` 파일을 작성해주세요.
-
-템플릿은 동일 경로에 있습니다.
 ```
 
 STOP.
 
 **파일이 있으면:** 페르소나 목록을 로드한다.
-
-### value-proposition.md 확인 (선택)
-
-`.agents/skills/write-story/references/value-proposition.md` 존재 여부를 확인한다.
-
-- **있으면:** 검증할 가정(assumptions)과 사용자 가치(value) 목록을 로드한다.
-- **없으면:** 스토리 분리 시 AI가 가치를 직접 추론한다. (중단하지 않음)
 
 ---
 
@@ -110,6 +101,21 @@ PAUSE.
 - **Valuable**: 기술적 수평 분할이 아닌 사용자에게 실질적인 가치를 전달하는가?
 - **Small**: 하나의 이터레이션 안에서 완료할 수 있을 만큼 작은가?
 - **Testable**: 인수 기준을 작성할 수 있는가?
+
+### UI 인터랙션 흐름 시나리오일 때
+
+시나리오가 화면 구성, 버튼, 입력 폼 등 UI 조작 흐름을 포함하면 **UI 인터랙션 흐름별 분리 패턴**을 적용한다.
+
+다음 유형별로 스토리를 나눈다:
+1. **진입점 노출** — 기능을 시작할 수 있는 버튼/아이콘이 화면에 보인다
+2. **화면 전환** — 버튼을 누르면 새 화면/윈도우가 열린다
+3. **폼 구성 확인** — 열린 화면에서 필요한 입력 필드와 버튼이 보인다
+4. **데이터 저장** — 입력 후 저장하면 결과가 특정 화면에 반영된다
+5. **취소/복귀** — 취소하거나 이전 버튼으로 되돌아간다
+6. **기존 데이터 노출** — 수정 진입 시 기존 값이 채워져 있다
+7. **삭제 확인** — 삭제 전 확인 메시지가 표시된다
+
+> "버튼 하나 추가"가 너무 작아 보여도, UI 인터랙션 흐름 단위에서는 유효한 스토리다.
 
 ### 분리 결과 표시 형식
 
@@ -168,6 +174,18 @@ As a [페르소나], I want to [기능], so that [가치].
 1. **해피 패스** — 정상적인 주요 흐름 먼저
 2. **엣지 케이스** — 경계값, 예외 흐름
 3. **오류 케이스** — 잘못된 입력, 시스템 오류
+
+### UI 스토리 AC 작성 시 규칙
+
+- **GIVEN**: 항상 화면 이름을 명시한다 (예: "메인 화면이 열려 있을 때")
+- **THEN**: 화면의 어느 위치에서 무엇이 보이는지 명시한다 (예: "오른쪽 상단에 + 버튼이 보인다")
+- 상세 규칙은 `ac-writing-guide.md`의 "UI 스토리 AC 작성 패턴" 참조
+
+### 영속성 AC
+
+데이터를 **생성·수정·삭제**하는 스토리에는 반드시 영속성 AC를 마지막에 추가한다.
+별도 "영속성 스토리"를 만들지 않는다.
+패턴은 `ac-writing-guide.md`의 "영속성 AC 패턴" 참조
 
 ### 제안 형식
 
@@ -363,8 +381,6 @@ mcp__tracker__create_story
 
 | 파일 | 사용 시점 |
 |------|---------|
-| `.agents/skills/write-story/references/persona.md` | Step 0에서 로드 (필수) |
-| `.agents/skills/write-story/references/value-proposition.md` | Step 0에서 로드 (선택) |
 | `.agents/skills/write-story/references/story-splitting-guide.md` | Step 2 스토리 분리 시 |
 | `.agents/skills/write-story/references/story-format-guide.md` | Step 2 스토리 초안 형식 |
 | `.agents/skills/write-story/references/ac-writing-guide.md` | Step 3 AC 작성 시 |
