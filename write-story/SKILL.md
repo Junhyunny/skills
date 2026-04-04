@@ -252,9 +252,7 @@ PAUSE. 변경 사항 반영 후 재표시. "ok" / "done" 을 받으면 레이블
 레이블이 확정되면, TrackerBoot MCP로 동일 프로젝트 내 동일 레이블의 기존 스토리를 조회한다.
 
 ```
-mcp__trackerboot__list_stories (project_id + label filter)
-mcp__trackerboot__get_stories
-mcp__pivotal__list_stories
+tracker-boot-mcp-tb_search_stories (projectId + labels filter)
 ```
 
 조회 시 반드시 Step 0에서 저장한 `project-id`를 함께 전달한다.
@@ -316,32 +314,39 @@ PAUSE.
 
 개발자가 확인하면 TrackerBoot MCP로 스토리를 **순서대로 하나씩** 등록한다.
 
-### MCP 도구 패턴 (순서대로 시도)
+### MCP 도구
 
 ```
-mcp__trackerboot__create_story
-mcp__trackerboot__add_story
-mcp__trackerboot__story_create
-mcp__pivotal__create_story
-mcp__tracker__create_story
+tracker-boot-mcp-tb_create_story   — 스토리 생성
+tracker-boot-mcp-tb_batch_create_tasks — 인수 기준(AC) 태스크 일괄 등록
 ```
 
-### 등록 페이로드
+### 등록 절차
 
-`project_id`는 반드시 포함한다.
+스토리마다 다음 2단계로 등록한다.
+
+**1단계 — 스토리 생성:**
 
 ```json
 {
-  "project_id": "[Step 0에서 저장한 project-id]",
-  "name": "[스토리 제목]",
-  "description": "[As a / I want / so that 전체 텍스트]",
-  "story_type": "feature",
-  "labels": ["[레이블1]", "[레이블2]"],
-  "tasks": [
-    { "description": "GIVEN [...] WHEN [...] THEN [...]" },
-    ...
+  "projectId": "[Step 0에서 저장한 project-id]",
+  "title": "[스토리 제목]",
+  "storyType": "Feature",
+  "description": "As a [페르소나], I want to [기능], so that [가치]."
+}
+```
+
+**2단계 — 인수 기준 태스크 등록 (1단계에서 반환된 storyId 사용):**
+
+```json
+{
+  "storyId": "[생성된 스토리 ID]",
+  "titles": [
+    "GIVEN [조건] WHEN [행동] THEN [결과]",
+    "GIVEN [조건] WHEN [행동] THEN [결과]"
   ]
 }
+```
 ```
 
 ### 등록 진행 표시
