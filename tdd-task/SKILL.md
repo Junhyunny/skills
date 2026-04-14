@@ -376,7 +376,7 @@ Now choose who handles RED.
 | `restart task` | 현재 태스크 초기화, RED부터 다시 시작 |
 | `add rule [내용]` | `.agents/coding-conventions.md`의 Custom Rules에 즉시 추가 후 이후 코드에 반영 |
 | `update stack` | `/sync-tech-stack`를 다시 호출해 `.agents/tech-stack.md`를 갱신 |
-| `update conventions` | 지금까지 작성된 코드를 기반으로 컨벤션 파일 재스캔 및 갱신 |
+| `update conventions` | `/sync-coding-conventions`를 호출해 컨벤션 드리프트를 감지하고 `.agents/coding-conventions.md`를 갱신 |
 | `add stack [기술명]` | 프로젝트에 새 기술 스택 추가 — AI가 설치 명령과 설정 스니펫 제공 후 스택 파일과 컨벤션 파일을 갱신 |
 
 ### `add rule` 처리 방법
@@ -397,11 +397,10 @@ Now choose who handles RED.
 ### `update conventions` 처리 방법
 
 개발자가 `update conventions`를 입력하면:
-1. `.agents/tech-stack.md`에서 현재 스택 영역 목록을 다시 읽습니다
-2. 지금까지 이번 세션에서 작성된 소스/테스트 파일을 다시 읽습니다
-3. 기존 컨벤션 파일과 비교해 새로운 패턴이 있으면 업데이트합니다
-4. 표시: `✅ 컨벤션 파일 갱신됨 (.agents/coding-conventions.md)`
-5. 중단 없이 현재 단계를 계속 진행합니다
+1. `/sync-coding-conventions`를 호출합니다
+2. 갱신된 `.agents/coding-conventions.md`를 다시 읽습니다
+3. 표시: `✅ 컨벤션 파일 갱신됨 (.agents/coding-conventions.md)`
+4. 중단 없이 현재 단계를 계속 진행합니다
 
 ---
 
@@ -762,5 +761,6 @@ REFACTOR 후:
 | `.agents/tech-stack.md` | 세션 시작 시, `update stack` 실행 시, 새 기술 추가 직후 |
 | `.agents/coding-conventions.md` | **RED/GREEN/REFACTOR 매 단계마다** — 항상 최신 규칙 적용 |
 | `.agents/skills/sync-tech-stack/SKILL.md` | 기술 스택 파일 생성/갱신이 필요할 때 |
+| `.agents/skills/sync-coding-conventions/SKILL.md` | 컨벤션 드리프트 감지/갱신이 필요할 때 |
 | `.agents/skills/tdd-task/references/red-green-refactor-guide.md` | 각 단계 완료 기준 판단 시 |
 | `.agents/skills/tdd-task/references/coding-conventions-template.md` | 컨벤션 파일 생성/갱신 시 — 파일 구조 및 생성 규칙 |
