@@ -152,8 +152,8 @@ description: >
 
 ### 컨텍스트 압축 규칙
 
-- **초기 분석/준비(스택 파일, 컨벤션 파일, 현재 태스크 파악) 완료 후** RED에 들어가기 전에 `/context → /compact → /context` 순서를 **개발자가 직접 실행하도록 안내**합니다
-- **현재 태스크가 `✅ done`으로 끝난 뒤** 다음 태스크 또는 `/tdd-commit`으로 넘어가기 전에 `/context → /compact → /context` 순서를 **개발자가 직접 실행하도록 안내**합니다
+- **초기 분석/준비(스택 파일, 컨벤션 파일, 현재 태스크 파악) 완료 후** RED에 들어가기 전에 관련된 내용은 모두 `/context`로 사용량을 확인하고 `/compact`로 압축하도록 **개발자가 직접 실행하도록 안내**합니다
+- **현재 태스크가 `✅ done`으로 끝난 뒤** 다음 태스크 또는 `/tdd-commit`으로 넘어가기 전에 관련된 내용은 모두 `/context`로 사용량을 확인하고 `/compact`로 압축하도록 **개발자가 직접 실행하도록 안내**합니다
 - 같은 태스크의 RED/GREEN/REFACTOR 사이클 중간에는 `/compact`를 남발하지 않습니다
 - 압축 후에는 전체 상태를 다시 길게 출력하지 않고 짧은 전환만 표시합니다
 - 에이전트는 `/context`, `/compact`를 직접 실행하지 않고 안내 메시지만 남깁니다
@@ -260,22 +260,14 @@ Who handles RED for this cycle?
 → **"you"** — AI writes it
 ```
 
-이 RED 진입 직전에 먼저:
-
-```text
-/context
-/compact
-/context
-```
-
-를 **개발자가 CLI에서 직접 순서대로 실행하도록 안내**합니다.
+이 RED 진입 직전에 먼저 관련된 내용은 모두 `/context`로 사용량을 확인하고 `/compact`로 압축하도록 **개발자가 CLI에서 직접 실행하도록 안내**합니다.
 
 - 에이전트는 명령 실행 대신 아래처럼 짧게 안내하고 기다립니다.
 
 표시는 짧게 유지합니다:
 
 ```markdown
-Before RED, run `/context`, `/compact`, `/context` in the CLI.
+Before RED, review the relevant context usage with `/context` and compress it with `/compact` in the CLI.
 When finished, reply `done` and then choose who handles RED.
 ```
 
@@ -620,22 +612,14 @@ REFACTOR 후:
 
 3. **커밋 여부 확인:**
 
-   현재 태스크가 끝났으므로, 다음 작업으로 넘어가기 전에 먼저:
-
-   ```text
-   /context
-   /compact
-   /context
-   ```
-
-   를 **개발자가 CLI에서 직접 순서대로 실행하도록 안내**합니다.
+   현재 태스크가 끝났으므로, 다음 작업으로 넘어가기 전에 관련된 내용은 모두 `/context`로 사용량을 확인하고 `/compact`로 압축하도록 **개발자가 CLI에서 직접 실행하도록 안내**합니다.
 
    - 에이전트는 명령 실행 대신 아래처럼 짧게 안내하고 기다립니다.
 
    이후 짧게 표시:
 
    ```markdown
-   Before moving on, run `/context`, `/compact`, `/context` in the CLI.
+   Before moving on, review the relevant context usage with `/context` and compress it with `/compact` in the CLI.
    When finished, reply `done`.
    ```
 
