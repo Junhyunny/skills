@@ -271,19 +271,75 @@ Progress: [N] ✅ done / [N+1] 🔄 active / 나머지 ⏳ pending
 
 ---
 
+## 정리/삭제 태스크 예외
+
+현재 태스크의 목적이 **불필요한 파일/코드/테스트를 삭제하거나 정리하는 것**이라면, 이 태스크는 RED-GREEN-REFACTOR 사이클을 강제하지 않습니다.
+
+다음과 같은 태스크가 여기에 해당합니다:
+- 사용하지 않는 파일 삭제
+- obsolete / dead code 제거
+- 더 이상 보이지 않는 테스트 삭제
+- 임시 코드, 중복 코드, 더 이상 필요 없는 mock/fixture 정리
+- 동작 추가 없이 구조만 정리하는 cleanup-only 작업
+
+이런 태스크는 "테스트를 먼저 추가했다가, 정리 후 다시 테스트를 삭제하는" 불필요한 왕복을 만들 수 있으므로 **한 번에 처리**합니다.
+
+### 정리/삭제 태스크 진행 방식
+
+- RED / GREEN / REFACTOR 담당을 따로 묻지 않습니다
+- 먼저 이 정리 태스크를 **누가 한 번에 처리할지**만 묻습니다
+- AI가 선택되면 관련 파일 정리, 참조 제거, 불필요 코드 삭제를 **한 번에 적용**합니다
+- 개발자가 선택되면 한 번에 정리한 뒤 완료를 알리면 됩니다
+- 필요하면 기존 테스트/빌드만 확인하되, **정리 작업 자체를 위해 새 RED 테스트를 만들지는 않습니다**
+
+표시:
+
+```markdown
+Task [N]: [title]
+Type: cleanup
+
+This task is cleanup-only, so the TDD phase cycle is skipped.
+Who handles this cleanup task?
+→ **"me"** — I'll clean it up
+→ **"you"** — AI cleans it up
+```
+
+### 정리/삭제 태스크에서 AI가 선택된 경우
+
+1. `.agents/coding-conventions.md`를 읽고 삭제/정리 시 지켜야 할 구조 규칙을 확인합니다
+2. 관련된 불필요 파일, 테스트, import, mock, reference를 **한 번에 정리**합니다
+3. 필요한 경우에만 기존 테스트/빌드를 다시 실행하도록 짧게 안내합니다
+4. 완료 후 `✅ Cleanup complete: [task title]`처럼 짧게 표시하고 **태스크 완료** 섹션으로 진행합니다
+
+### 정리/삭제 태스크에서 개발자가 선택된 경우
+
+```markdown
+## 🧹 CLEANUP — Your Turn
+
+Remove the unnecessary files/code/tests for this task in one pass.
+Do not create new RED tests for cleanup-only work.
+
+Type **"done"** when the cleanup is finished.
+```
+
+개발자가 완료를 알리면 **태스크 완료** 섹션으로 진행합니다.
+
+---
+
 
 
 현재 태스크 세부 사항을 표시한 후, **각 페이즈에 들어가기 직전에 그 페이즈의 작업 주체를 다시 확인합니다.**
 
 ### 페이즈 담당 확인 규칙
 
+- **정리/삭제 태스크가 아닌 경우에만** 아래 RED/GREEN/REFACTOR 담당 확인 규칙을 사용합니다
 - RED에 들어가기 전: 누가 실패하는 테스트를 작성할지 묻습니다
 - GREEN에 들어가기 전: 누가 최소 구현을 작성할지 묻습니다
 - REFACTOR에 들어가기 전: 누가 리팩토링을 수행할지 묻습니다
 - **AI는 해당 페이즈에서 명시적으로 선택된 경우에만 파일을 수정합니다**
 - 특히 **GREEN에서는 "you"를 받은 경우에만 AI가 구현 파일을 작성합니다**
 
-처음에는 RED 담당만 확인합니다:
+정리/삭제 태스크가 아니라면, 처음에는 RED 담당만 확인합니다:
 
 ```
 Task [N]: [title]
@@ -631,7 +687,7 @@ REFACTOR 후:
 
 ## 태스크 완료
 
-개발자가 태스크의 테스트가 완료되었음을 알리거나 (더 이상 이 태스크에 대한 테스트가 없는 경우), 또는 양측이 태스크가 완료되었다고 동의하는 경우:
+개발자가 태스크의 테스트가 완료되었음을 알리거나 (더 이상 이 태스크에 대한 테스트가 없는 경우), 정리/삭제 태스크의 일괄 정리가 끝났음을 알리거나, 또는 양측이 태스크가 완료되었다고 동의하는 경우:
 
 1. `.tdd-sessions/{story-id}.md`를 업데이트합니다:
    - 현재 태스크를 `✅ done`으로 표시합니다
