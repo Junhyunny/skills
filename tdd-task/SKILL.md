@@ -48,6 +48,28 @@ description: >
 ```
 중지.
 
+세션 파일을 읽은 뒤, **프론트엔드와 백엔드가 함께 있는 스토리인지** 확인합니다.
+
+- `## Meta`의 Stack/API Client/Spec path와 태스크 목록을 함께 봅니다
+- 스토리가 UI 입력/저장/조회/목록 반영 같은 서버 연동 흐름이면, 태스크 목록에 **실제 API 호출 연결 태스크**가 있는지 확인합니다
+- 예: generated client 재생성, frontend service 호출, preload/electron bridge 연결, create 호출, list 호출, 저장 후 refresh/invalidation
+
+**누락으로 판단하는 경우:**
+- 백엔드 엔드포인트 태스크는 있는데 프론트의 실제 API 호출 연결 태스크가 없음
+- 프론트 UI 렌더링 태스크는 있는데 어떤 서비스/클라이언트가 서버를 호출하는지 범위에 없음
+- "저장하면 목록 반영"인데 create와 read가 각각 어디에서 연결되는지 태스크에서 드러나지 않음
+
+이 경우, 현재 태스크를 바로 진행하지 말고 짧게 알립니다:
+
+```markdown
+⚠️ 현재 세션에는 프론트-백엔드 API 연결 태스크가 명시적으로 보이지 않습니다.
+
+백엔드 엔드포인트와 UI 태스크만으로는 실제 서버 호출 구현이 빠질 수 있습니다.
+API client / service / bridge / refresh 흐름을 다루는 태스크를 세션에 추가한 뒤 다시 진행하세요.
+```
+
+그리고 세션 파일을 보완하도록 안내한 뒤 일시 중지합니다.
+
 상태가 `⏳ pending`인 첫 번째 태스크를 찾아 파일에서 `🔄 active`로 표시합니다.
 
 ---
@@ -147,7 +169,7 @@ description: >
 - **세션 시작 시 첫 태스크에 진입할 때만** 전체 세션 상태 블록을 표시합니다
 - **Task [N] 완료 후 Task [N+1]로 넘어갈 때는** 전체 세션 상태 블록을 다시 출력하지 않고, `Current Task / Phase / Next Action`과 필요한 경우 `Task Progress`의 현재/다음 항목만 짧게 표시합니다
 - **Phase Owner가 바뀌는 시점**에는 필요한 경우에만 전체 블록 대신 `Phase / Owner / Current Task / Next Action`만 짧게 표시합니다
-- `yes`, `ok`, `confirm`, `red confirmed`, `green confirmed`, `skip` 같은 짧은 응답 뒤에는 **이전 요약 전체를 다시 출력하지 않습니다**
+- `yes`, `ok`, `confirm`, `me`, `you`, `skip` 같은 짧은 응답 뒤에는 **이전 요약 전체를 다시 출력하지 않습니다**
 - 확인 후에는 `✅ RED 확인됨. GREEN 담당을 선택해주세요.`처럼 **짧은 전환 메시지**만 표시합니다
 - 전체 상태 블록이나 긴 요약은 개발자가 `show status`, `show task`, `show full`처럼 요청한 경우에만 다시 표시합니다
 - Story, Stack, Test FW 같은 상단 메타데이터는 **첫 태스크 진입 시** 또는 개발자가 명시적으로 요청한 경우에만 다시 표시합니다
@@ -355,7 +377,9 @@ When finished, reply `done` and then choose who handles RED.
    [실패 메시지 예시]
 
    테스트를 실행하고 RED 상태(올바른 이유로 실패)를 확인해주세요.
-   Type **"red confirmed"** or **"failing"** to continue.
+   정상적인 테스트 실패를 확인하셨다면, 다음 스텝을 누가 진행할지 정해주세요.
+   Type **"me"** if you'll handle GREEN, or **"you"** if AI should handle GREEN.
+   (Paste error output if RED is wrong)
    ```
 6. 일시 정지하고 기다립니다
 
@@ -375,7 +399,7 @@ When finished, reply `done` and then choose who handles RED.
    (Or type "skip" to have AI write it instead)
    ```
 3. 일시 정지하고 기다립니다
-4. 개발자가 코드를 붙여넣으면: 확인하고, 파일 경로를 기록하고, RED 확인 후 GREEN 담당 확인으로 진행합니다
+4. 개발자가 코드를 붙여넣으면: 확인하고, 파일 경로를 기록하고, RED 확인과 GREEN 담당 선택을 한 번에 진행합니다
 
 ### "올바른 이유"의 의미
 
@@ -389,12 +413,10 @@ MockKException: no answer found             ClassNotFoundException
 
 실패 이유가 잘못된 경우: 컴파일/import 오류를 해결하기 위해 빈 스텁(동작 없음)을 생성하고, 다시 실행한 후 RED를 확인합니다.
 
-RED가 확인되면, 이전 RED 요약을 다시 출력하지 말고 짧게 전환한 뒤 GREEN으로 넘어가기 전에 반드시 다음을 묻습니다:
+RED가 확인되면, 이전 RED 요약을 다시 출력하지 말고 **확인 응답에서 바로 GREEN 담당을 선택하도록** 짧게 안내합니다:
 
 ```
-✅ RED 확인됨.
-
-Who handles GREEN for this cycle?
+정상적인 테스트 실패를 확인하셨다면, 다음 스텝을 누가 진행할지 정해주세요.
 → **"me"** — I'll write the minimum implementation
 → **"you"** — AI writes the minimum implementation
 ```
@@ -424,7 +446,8 @@ Who handles GREEN for this cycle?
    ✏️ 구현 파일 작성 완료: [정확한 파일 경로]
 
    전체 테스트를 실행해주세요.
-   Type **"green confirmed"** or **"passing"** when all tests pass.
+   모든 테스트가 통과했다면, 다음 스텝을 누가 진행할지 정해주세요.
+   Type **"me"** if you'll handle REFACTOR, **"you"** if AI should refactor, or **"skip"** to skip REFACTOR.
    (Paste error output if tests still fail)
    ```
 6. 일시 정지하고 기다립니다
@@ -442,8 +465,11 @@ Who handles GREEN for this cycle?
    Write the minimum code to make the failing test pass.
    No extra features — pass the test only.
 
-   Type **"done"** or **"green confirmed"** when all tests pass.
-   (Or type "skip" to have AI implement it instead)
+   When all tests pass, choose who handles REFACTOR next:
+   → **"me"** — I'll refactor
+   → **"you"** — AI refactors
+   → **"skip"** — no refactor for this cycle
+   (Or type "skip" now to have AI implement GREEN instead)
    ```
 3. 일시 정지하고 기다립니다
 
@@ -465,12 +491,10 @@ async getUser(id: string) {
 
 캐싱, 오류 처리 등은 테스트에서 요구할 때만 추가합니다.
 
-GREEN이 확인되면, 이전 GREEN 요약을 다시 출력하지 말고 짧게 전환한 뒤 REFACTOR로 넘어가기 전에 반드시 다음을 묻습니다:
+GREEN이 확인되면, 이전 GREEN 요약을 다시 출력하지 말고 **확인 응답에서 바로 REFACTOR 담당을 선택하도록** 짧게 안내합니다:
 
 ```
-✅ GREEN 확인됨.
-
-Who handles REFACTOR for this cycle?
+모든 테스트가 통과했다면, 다음 스텝을 누가 진행할지 정해주세요.
 → **"me"** — I'll refactor
 → **"you"** — AI proposes and applies refactors
 → **"skip"** — no refactor for this cycle
