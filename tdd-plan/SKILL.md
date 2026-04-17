@@ -157,11 +157,11 @@ Does this look correct? Type "ok" to continue, or let me know what to fix.
 
 ## Step 3: 프로젝트 컨벤션 감지
 
-먼저 프로젝트 루트의 `.agents/coding-conventions.md` 존재 여부를 확인합니다.
+먼저 프로젝트 루트의 `CONVENTIONS.md` 존재 여부를 확인합니다.
 
 ### 이미 파일이 있는 경우
 
-- `.agents/coding-conventions.md`가 있으면 **그 파일만 읽어 사용합니다**
+- `CONVENTIONS.md`가 있으면 **그 파일만 읽어 사용합니다**
 - 이 경우 프로젝트 소스/테스트 파일을 다시 검색하지 않습니다
 - 개발자가 명시적으로 `update conventions`를 요청한 경우에만 다시 스캔합니다
 
@@ -169,7 +169,7 @@ Does this look correct? Type "ok" to continue, or let me know what to fix.
 
 **기존 테스트 또는 소스 파일이 없는 경우(새 프로젝트) 이 단계를 건너뜁니다.**
 
-`.agents/coding-conventions.md`가 없을 때만 `.agents/tech-stack.md`에서 선택된 영역을 기준으로, 스토리와 같은 영역의 테스트 파일 2~3개와 소스 파일 1~2개를 읽습니다. 최근 수정된 파일을 선호합니다.
+`CONVENTIONS.md`가 없을 때만 `.agents/tech-stack.md`에서 선택된 영역을 기준으로, 스토리와 같은 영역의 테스트 파일 2~3개와 소스 파일 1~2개를 읽습니다. 최근 수정된 파일을 선호합니다.
 
 추출:
 - 테스트 파일 위치 (동일 위치 vs `test/` 디렉토리)

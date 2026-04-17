@@ -1,4 +1,4 @@
-# `.agents/coding-conventions.md` 파일 형식
+# `CONVENTIONS.md` 파일 형식
 
 `/sync-coding-conventions`가 생성/갱신하는 공유 코딩 컨벤션 파일의 형식을 정의한다.
 
@@ -7,7 +7,7 @@
 ## 파일 위치
 
 ```text
-.agents/coding-conventions.md
+CONVENTIONS.md
 ```
 
 프로젝트 루트 기준이며, 프로젝트의 공유 규칙 문서로 유지한다.

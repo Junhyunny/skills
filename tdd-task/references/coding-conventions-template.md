@@ -1,6 +1,6 @@
 # 코딩 컨벤션 파일 가이드
 
-`.agents/coding-conventions.md`의 구조와 생성/업데이트 규칙을 정의합니다.
+`CONVENTIONS.md`의 구조와 생성/업데이트 규칙을 정의합니다.
 이 파일은 팀 전체가 공유할 수 있도록 git에 커밋되며, `/tdd-task` 최초 실행 시 자동 생성됩니다.
 
 ---
@@ -8,7 +8,7 @@
 ## 파일 위치
 
 ```
-.agents/coding-conventions.md   ← 프로젝트 루트 기준, git에 커밋됨
+CONVENTIONS.md   ← 프로젝트 루트 기준, git에 커밋됨
 ```
 
 `.tdd-sessions/`는 TDD 페어링 컨텍스트 파일(gitignored)이므로 사용하지 않습니다.
@@ -158,7 +158,7 @@
 `update conventions` 요청이 오면 다음 원칙으로 직접 갱신합니다:
 
 1. 이번 세션에서 작성되었거나 최근 변경된 파일을 우선 읽습니다
-2. 기존 `.agents/coding-conventions.md`가 있으면 프로젝트 전체 재스캔보다 diff와 변경 파일 분석을 우선합니다
+2. 기존 `CONVENTIONS.md`가 있으면 프로젝트 전체 재스캔보다 diff와 변경 파일 분석을 우선합니다
 3. 기존 섹션 값과 다른 패턴이 발견되면 해당 항목만 업데이트합니다
 4. Custom Rules는 절대 건드리지 않습니다
 5. 변경된 항목 옆에 `_(업데이트: YYYY-MM-DD)_` 태그를 추가합니다
