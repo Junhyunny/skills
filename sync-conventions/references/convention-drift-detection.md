@@ -1,6 +1,6 @@
 # 컨벤션 드리프트 감지 가이드
 
-`/sync-coding-conventions`가 기존 `CONVENTIONS.md`를 업데이트할 때 사용하는 판단 규칙이다.
+`/sync-conventions`가 기존 `CONVENTIONS.md`를 업데이트할 때 사용하는 판단 규칙이다.
 
 ---
 

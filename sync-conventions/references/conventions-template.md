@@ -1,6 +1,6 @@
 # `CONVENTIONS.md` 파일 형식
 
-`/sync-coding-conventions`가 생성/갱신하는 공유 코딩 컨벤션 파일의 형식을 정의한다.
+`/sync-conventions`가 생성/갱신하는 공유 코딩 컨벤션 파일의 형식을 정의한다.
 
 ---
 
