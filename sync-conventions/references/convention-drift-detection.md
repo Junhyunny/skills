@@ -10,7 +10,7 @@
 2. 먼저 변경된 파일과 git diff를 본다
 3. 반복적이고 의도적인 변화만 팀 규칙 후보로 본다
 4. Custom Rules는 항상 최우선이며 자동으로 덮어쓰지 않는다
-5. `sync-tech-stack`나 `.agents/tech-stack.md`에 의존하지 않는다
+5. `sync-architecture`나 `ARCHITECTURE.md`에 의존하지 않는다
 
 ---
 
